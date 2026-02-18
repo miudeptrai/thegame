@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://dbkq6vvoeq6fv"]
+
+[ext_resource type="PackedScene" uid="uid://wbo055sbx06x" path="res://scenes/biome_tile.tscn" id="1_4xfga"]
+[ext_resource type="Script" uid="uid://bas4iej3khrrc" path="res://scripts/map.gd" id="1_paxxb"]
+[ext_resource type="Texture2D" uid="uid://dtrlh3gg6tkh0" path="res://asset/mouse-hover.png" id="3_gldc4"]
+[ext_resource type="PackedScene" uid="uid://byw1gqfqmkt4n" path="res://scenes/name_tag.tscn" id="4_0cso3"]
+[ext_resource type="PackedScene" uid="uid://dl2ttvdruwqg5" path="res://scenes/Attacks/rifle_attack.tscn" id="5_2klcf"]
+[ext_resource type="PackedScene" uid="uid://bmeqjln46fi0g" path="res://scenes/move.tscn" id="6_2lpho"]
+[ext_resource type="PackedScene" uid="uid://yb654iyx4j8d" path="res://scenes/select_tile.tscn" id="7_nakos"]
+[ext_resource type="PackedScene" uid="uid://dhi2m7yl010fv" path="res://scenes/attack_range_tile.tscn" id="8_jh32y"]
+
+[node name="Map" type="Node2D" unique_id=1286455713]
+script = ExtResource("1_paxxb")
+
+[node name="Biome Tile" parent="." unique_id=1897829061 instance=ExtResource("1_4xfga")]
+
+[node name="MouseHover" type="Sprite2D" parent="." unique_id=1505176722]
+z_index = 10
+position = Vector2(2879, -351)
+texture = ExtResource("3_gldc4")
+
+[node name="Menu Bar" type="Polygon2D" parent="." unique_id=1089956347]
+z_index = 20
+color = Color(0.18072194, 0.18072197, 0.18072197, 1)
+polygon = PackedVector2Array(0, 540, 0, 475, 960, 475, 960, 540)
+
+[node name="Name Tag" parent="." unique_id=77478787 instance=ExtResource("4_0cso3")]
+visible = false
+z_index = 15
+position = Vector2(4851, -594)
+
+[node name="Rifle Attack" parent="." unique_id=1308321181 instance=ExtResource("5_2klcf")]
+visible = false
+position = Vector2(686, 490)
+
+[node name="Move" parent="." unique_id=167983769 instance=ExtResource("6_2lpho")]
+visible = false
+position = Vector2(831, 490)
+
+[node name="Select Tile" parent="." unique_id=965464857 instance=ExtResource("7_nakos")]
+visible = false
+position = Vector2(2996, -346)
+
+[node name="Attack Range Tile" parent="." unique_id=45648092 instance=ExtResource("8_jh32y")]
+position = Vector2(3138, -384)

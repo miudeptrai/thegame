@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://yb654iyx4j8d"]
+
+[ext_resource type="Texture2D" uid="uid://bi8rqtrudbp56" path="res://asset/mouse-select.png" id="1_ur51u"]
+
+[node name="Select Tile" type="Sprite2D" unique_id=965464857]
+z_index = 11
+texture = ExtResource("1_ur51u")
+centered = false

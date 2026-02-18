@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dhi2m7yl010fv"]
+
+[ext_resource type="Texture2D" uid="uid://bntyc7naq0q4q" path="res://asset/attack-range-tile.png" id="1_5i01w"]
+[ext_resource type="Script" uid="uid://2kvs20ebuyhh" path="res://scripts/attack_range_tile.gd" id="1_nlheq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5i01w"]
+size = Vector2(64, 64)
+
+[node name="Attack Range Tile" type="Area2D" unique_id=45648092]
+z_index = 4
+script = ExtResource("1_nlheq")
+
+[node name="AttackRangeTile" type="Sprite2D" parent="." unique_id=701568077]
+position = Vector2(32, 32)
+texture = ExtResource("1_5i01w")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=37432416]
+position = Vector2(32, 32)
+shape = SubResource("RectangleShape2D_5i01w")

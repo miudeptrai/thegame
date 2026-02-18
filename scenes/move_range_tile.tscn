@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://boklfdbjlhr1q"]
+
+[ext_resource type="Texture2D" uid="uid://dkt3hc0k73eoh" path="res://asset/move-range-tile.png" id="1_sd6ox"]
+
+[node name="Move Range Tile" type="Area2D" unique_id=1005928562]
+
+[node name="MoveRangeTile" type="Sprite2D" parent="." unique_id=940025613]
+z_index = 4
+position = Vector2(32, 32)
+texture = ExtResource("1_sd6ox")

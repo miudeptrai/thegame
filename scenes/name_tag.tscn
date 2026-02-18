@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://byw1gqfqmkt4n"]
+
+[ext_resource type="FontFile" uid="uid://crtyl1rw2n20l" path="res://asset/Vaticanus-G3yVG.ttf" id="1_ovejf"]
+
+[node name="Name Tag" type="Node2D" unique_id=77478787]
+
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=1005320308]
+scale = Vector2(4.521739, 6.05)
+color = Color(0.18039216, 0.18039216, 0.18039216, 0.69803923)
+polygon = PackedVector2Array(0, 0, 69, 0, 69, 20, 0, 20)
+
+[node name="Label" type="Label" parent="." unique_id=1435972292]
+z_index = 15
+offset_right = 312.0
+offset_bottom = 87.0
+theme_override_fonts/font = ExtResource("1_ovejf")
+theme_override_font_sizes/font_size = 32
+text = "Hello World
+Health: 100%
+Moral: 100%"

@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://j3b5q4phdfqx"]
+
+[ext_resource type="Texture2D" uid="uid://dtrlh3gg6tkh0" path="res://asset/mouse-hover.png" id="1_0ulqb"]
+[ext_resource type="Script" uid="uid://bjnke34vk6kfb" path="res://scripts/mouse_hover.gd" id="2_3djhe"]
+
+[node name="Mouse Hover" type="Sprite2D" unique_id=369765742]
+texture = ExtResource("1_0ulqb")
+centered = false
+script = ExtResource("2_3djhe")

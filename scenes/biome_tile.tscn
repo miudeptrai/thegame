@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://wbo055sbx06x"]
+
+[ext_resource type="Script" uid="uid://bmxc783sn2l1a" path="res://scripts/biome_tile.gd" id="1_1mcjv"]
+
+[node name="Biome Tile" type="Node2D" unique_id=1897829061]
+script = ExtResource("1_1mcjv")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1789549338]
+offset = Vector2(32, 32)

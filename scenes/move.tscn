@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bmeqjln46fi0g"]
+
+[ext_resource type="Script" uid="uid://bckcg83rnq3mj" path="res://scripts/move.gd" id="1_fgflj"]
+[ext_resource type="Texture2D" uid="uid://cdpjulvmoi3qc" path="res://asset/move.png" id="1_yjl1y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u2nw4"]
+size = Vector2(32, 32)
+
+[node name="Move" type="Area2D" unique_id=167983769]
+script = ExtResource("1_fgflj")
+
+[node name="Move" type="Sprite2D" parent="." unique_id=231155091]
+z_index = 30
+position = Vector2(16, 16)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_yjl1y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=511397806]
+position = Vector2(16, 16)
+shape = SubResource("RectangleShape2D_u2nw4")

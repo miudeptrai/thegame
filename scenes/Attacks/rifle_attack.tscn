@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://dl2ttvdruwqg5"]
+
+[ext_resource type="Texture2D" uid="uid://cwyplbc0m62l5" path="res://asset/Attacks/rifle.png" id="1_d1aon"]
+[ext_resource type="Script" uid="uid://cwtf37d2eyel3" path="res://scripts/rifle_attack.gd" id="1_xd0xi"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d1aon"]
+size = Vector2(32, 32)
+
+[node name="Rifle Attack" type="Area2D" unique_id=1308321181]
+z_index = 30
+script = ExtResource("1_xd0xi")
+
+[node name="Rifle" type="Sprite2D" parent="." unique_id=1400666336]
+position = Vector2(16, 16)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_d1aon")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=335683381]
+position = Vector2(16, 16)
+shape = SubResource("RectangleShape2D_d1aon")

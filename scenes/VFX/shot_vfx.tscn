@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://covenruuqmtv4"]
+
+[ext_resource type="Texture2D" uid="uid://dt346jhii6t8u" path="res://asset/VFX/shot-vfx.png" id="1_x73n6"]
+[ext_resource type="Script" uid="uid://b3r4s6dbr0iwn" path="res://scripts/shot_vfx.gd" id="2_8ymob"]
+
+[node name="ShotVfx" type="Sprite2D" unique_id=1270495997]
+z_index = 4
+texture = ExtResource("1_x73n6")
+script = ExtResource("2_8ymob")
