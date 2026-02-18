@@ -8,6 +8,9 @@ var owner_of_action: Area2D;
 var active_attack_range_tile: Array = [];
 var pressed: bool = false;
 
+func _ready() -> void:
+	add_to_group("Skills");
+
 func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void:
 	if (event is InputEventMouseButton and event.pressed):
 		if (event.button_index == MOUSE_BUTTON_LEFT):

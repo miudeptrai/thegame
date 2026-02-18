@@ -15,25 +15,26 @@ signal name_tag(name_s: String, healthp: float, moralp:float);
 signal no_name_tag;
 
 var direction: Vector2;
-var rotating: bool = false;
+var firing: bool = false;
 var skill_in_use: String;
 var target: Area2D;
+
+var path: PackedVector2Array;
+var start_move_sequence: bool = false;
+var moving: bool = false;
+var next_interval: int = 1;
 
 func _ready() -> void:
 	add_to_group("Troops");
 
 func _process(delta: float) -> void:
-	if (rotating):
-		sprite.rotation = lerp_angle(
-			sprite.rotation,
-			direction.angle(),
-			stats.rotate_speed * delta
-		);
+	if (firing):
+		rotate_sprite(delta);
 		
 		#Stop rotate/ firing
 		if (abs(sprite.rotation - direction.angle()) < 0.01):
-			rotating = false;
-			if (skill_in_use == ""): return; #Move logic here
+			firing = false;
+			if (skill_in_use == ""): return;
 			
 			var curr_skill: Area2D = map.get_node(skill_in_use);
 			
@@ -59,7 +60,7 @@ func _process(delta: float) -> void:
 			dmg += randf_range(0.0, 5.0);
 			target.stats.health -= dmg;
 			target.stats.moral -= dmg / target.stats.health;
-			target.get_node("Dmg Tag").shot(dmg);
+			target.get_node("Indicator").shot(dmg);
 			print(target.stats.health);
 			
 			var tween: Tween = create_tween();
@@ -79,6 +80,24 @@ func _process(delta: float) -> void:
 				.as_relative()\
 				.set_trans(Tween.TRANS_QUAD)\
 				.set_ease(Tween.EASE_OUT);
+	elif (start_move_sequence):
+		print(path);
+		if (moving):
+			var tween: Tween = create_tween();
+			tween.tween_property(self, "global_position", path[next_interval], 1.0)\
+				.set_trans(Tween.TRANS_QUAD)\
+				.set_ease(Tween.EASE_OUT);
+			moving = false;
+			next_interval += 1;
+			
+			if (next_interval >= path.size()):
+				start_move_sequence = false;
+				return;
+		else:
+			direction = (path[next_interval] + Vector2(TEXTURE_WIDTH, TEXTURE_HEIGHT))\
+						- global_position;
+			rotate_sprite(delta);
+			moving = true;
 
 func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void:
 	if (event is InputEventMouseButton and event.pressed):
@@ -117,6 +136,14 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 				move_skill.hide();
 			move_skill.deselect();
 			move_skill.owner_of_action = self;
+
+func rotate_sprite(delta: float) -> void:
+	#Rotate sprite
+	sprite.rotation = lerp_angle(
+		sprite.rotation,
+		direction.angle(),
+		stats.rotate_speed * delta
+	);
 
 func _on_mouse_entered() -> void:
 	name_tag.emit("Rifle Man", stats.health / stats.max_health,

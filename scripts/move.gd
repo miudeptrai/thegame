@@ -6,6 +6,9 @@ var owner_of_action;
 var active_move_range_tile: Array = [];
 var pressed: bool = false;
 
+func _ready() -> void:
+	add_to_group("Skills");
+
 func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void:
 	if (event is InputEventMouseButton and event.pressed):
 		if (event.button_index == MOUSE_BUTTON_LEFT):
@@ -60,6 +63,7 @@ func load_range(pos: Vector2i) -> void:
 	else:
 		curr = MOVE_RANGE_TILE.instantiate();
 		get_parent().add_child(curr);
+	curr.owner_of_action = owner_of_action;
 	active_move_range_tile.append(curr);
 	
 	var new_pos = Vector2(

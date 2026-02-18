@@ -1,10 +1,19 @@
 [gd_scene format=3 uid="uid://boklfdbjlhr1q"]
 
+[ext_resource type="Script" uid="uid://6ytxusfw6hor" path="res://scripts/move_range_tile.gd" id="1_d4wvs"]
 [ext_resource type="Texture2D" uid="uid://dkt3hc0k73eoh" path="res://asset/move-range-tile.png" id="1_sd6ox"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_llcs7"]
+size = Vector2(64, 64)
+
 [node name="Move Range Tile" type="Area2D" unique_id=1005928562]
+script = ExtResource("1_d4wvs")
 
 [node name="MoveRangeTile" type="Sprite2D" parent="." unique_id=940025613]
 z_index = 4
 position = Vector2(32, 32)
 texture = ExtResource("1_sd6ox")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2088600872]
+position = Vector2(32, 32)
+shape = SubResource("RectangleShape2D_llcs7")

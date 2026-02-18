@@ -3,6 +3,9 @@ extends Node2D
 const TEXTURE_WIDTH: int = 64;
 const TEXTURE_HEIGHT: int = 64;
 
+const ROWS: int = 10;
+const COLS: int = 15;
+
 const BIOME_TILE = preload("uid://wbo055sbx06x");
 const RIFLE_MAN = preload("uid://b7a6788cu3t88");
 
@@ -19,15 +22,25 @@ var move_range_avail: Array = [];
 var active_skills: Array = [];
 var bullet_avail: Array = [];
 
+#Pathfinding
+var astar: AStar2D = AStar2D.new();
+
 func _ready() -> void:
 	load_default_map();
+	connect_grid();
+	print("Point count:", astar.get_point_count())
+	print("Connections of 0:", astar.get_point_connections(0))
 	
 	var troop: Area2D = RIFLE_MAN.instantiate();
 	add_child(troop);
 	troop.global_position = Vector2(256, 256);
+	var troop_id = astar.get_closest_point(troop.global_position);
+	astar.set_point_disabled(troop_id, true);
 	troop = RIFLE_MAN.instantiate();
 	add_child(troop);
 	troop.global_position = Vector2(256, 192);
+	troop_id = astar.get_closest_point(troop.global_position);
+	astar.set_point_disabled(troop_id, true);
 	#print(troop.is_in_group("Troops"));
 	
 	#remember to move these lines to Camera
@@ -52,14 +65,40 @@ func _process(delta: float) -> void:
 	else: $"Name Tag".hide();
 
 func load_default_map() -> void:
-	for i in range(0, 10):
-		for j in range(0, 15):
+	var id: int = 0;
+	for i in range(0, ROWS):
+		for j in range(0, COLS):
+			var pos: Vector2 = Vector2(
+				j * TEXTURE_WIDTH,
+				i * TEXTURE_HEIGHT
+			);
+			
+			#Set up tile
 			var tile: Node2D = BIOME_TILE.instantiate();
 			add_child(tile);
-			tile.global_position = Vector2(
-				j * tile.TEXTURE_WIDTH,
-				i * tile.TEXTURE_HEIGHT
-			);
+			tile.global_position = pos;
+			
+			#Set up pathfind map (grid-based)
+			astar.add_point(id, pos);
+			id += 1;
+
+func connect_grid() -> void:
+	for id in astar.get_point_ids():
+		var pos = astar.get_point_position(id);
+		
+		var neighbours: Array = [
+			Vector2(TEXTURE_WIDTH, 0),
+			Vector2(-TEXTURE_WIDTH, 0),
+			Vector2(0, TEXTURE_HEIGHT),
+			Vector2(0, -TEXTURE_HEIGHT)
+		];
+		
+		for neighbour in neighbours:
+			var neighbour_pos = pos + neighbour;
+			var neighbour_id = astar.get_closest_point(neighbour_pos);
+			
+			if (astar.get_point_position(neighbour_id) == neighbour_pos):
+				astar.connect_points(id, neighbour_id);
 
 func _on_name_tag(s, h, m):
 	displayed_name_tag = true;
