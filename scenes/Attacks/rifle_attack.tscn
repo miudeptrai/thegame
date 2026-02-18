@@ -2,6 +2,12 @@
 
 [ext_resource type="Texture2D" uid="uid://cwyplbc0m62l5" path="res://asset/Attacks/rifle.png" id="1_d1aon"]
 [ext_resource type="Script" uid="uid://cwtf37d2eyel3" path="res://scripts/rifle_attack.gd" id="1_xd0xi"]
+[ext_resource type="Script" uid="uid://brlw51rs7bnso" path="res://scripts/skill_stats.gd" id="2_hrn74"]
+
+[sub_resource type="Resource" id="Resource_bqv24"]
+resource_local_to_scene = true
+script = ExtResource("2_hrn74")
+metadata/_custom_type_script = "uid://brlw51rs7bnso"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d1aon"]
 size = Vector2(32, 32)
@@ -9,6 +15,7 @@ size = Vector2(32, 32)
 [node name="Rifle Attack" type="Area2D" unique_id=1308321181]
 z_index = 30
 script = ExtResource("1_xd0xi")
+stats = SubResource("Resource_bqv24")
 
 [node name="Rifle" type="Sprite2D" parent="." unique_id=1400666336]
 position = Vector2(16, 16)

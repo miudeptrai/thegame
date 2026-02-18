@@ -1,7 +1,14 @@
 [gd_scene format=3 uid="uid://b7a6788cu3t88"]
 
 [ext_resource type="Script" uid="uid://e5g2x11tac8p" path="res://scripts/rifle_man.gd" id="1_di55e"]
+[ext_resource type="Script" uid="uid://ibcpvcosg08r" path="res://scripts/stats.gd" id="2_3qk45"]
 [ext_resource type="Texture2D" uid="uid://dfrw71egdtutc" path="res://asset/Troops/WWI/rifle-man.png" id="2_u3kgv"]
+
+[sub_resource type="Resource" id="Resource_b0nam"]
+resource_local_to_scene = true
+script = ExtResource("2_3qk45")
+display_name = "Rifle Man"
+metadata/_custom_type_script = "uid://ibcpvcosg08r"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3qk45"]
 size = Vector2(64, 64)
@@ -9,6 +16,7 @@ size = Vector2(64, 64)
 [node name="Rifle Man" type="Area2D" unique_id=1199333040 groups=["Troops"]]
 z_index = 5
 script = ExtResource("1_di55e")
+stats = SubResource("Resource_b0nam")
 
 [node name="Sprite" type="Sprite2D" parent="." unique_id=1422962431]
 position = Vector2(32, 32)
