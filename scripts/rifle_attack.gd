@@ -1,14 +1,10 @@
 extends Area2D
 
-# Overhaul the script to use stats
-const RANGE: int = 1;
-
 const ATTACK_RANGE_TILE: PackedScene = preload("uid://dhi2m7yl010fv");
 
 @export var stats: SkillStats;
 
 var owner_of_action: Area2D;
-var id: int;
 var active_attack_range_tile: Array = [];
 var pressed: bool = false;
 
@@ -19,7 +15,7 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 			deselect_all_but_self();
 			
 			#print("Clicked");
-			#BFS
+			#BFS for range
 			
 			#clock-wise
 			var neighbours: Array = [
@@ -42,7 +38,7 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 					continue;
 				
 				visited[curr["pos"]] = true;
-				if (curr["dist"] > RANGE): continue;
+				if (curr["dist"] > stats.attack_range): continue;
 				
 				load_range(curr["pos"]);
 				

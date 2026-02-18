@@ -94,5 +94,5 @@ func get_object_at_point(point: Vector2):
 
 	for i in result:
 		if (i.collider.is_in_group("Troops")): return i.collider;
-	print("Found nothing");
+	#print("Found nothing");
 	return null;

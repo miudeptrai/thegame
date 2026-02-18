@@ -17,16 +17,21 @@ signal health_depleted;
 signal moral_depleted;
 
 @export var display_name: String = "Dummy";
-@export var skills: Array = [];
+@export var skills: Array[String] = [];
 @export var max_health: float = 100.0;
-@export var base_max_moral: float = 100.0;
-@export var base_defense: float = 100.0;
+@export var base_max_moral: float = 30.0;
+@export var base_defense: float = 50.0;
 @export var base_power: float = 10.0;
 @export var badge: int = 0: set = _on_badge_set;
 @export var max_badge: int = 10;
+@export var speed: int = 2;
 
-var curr_defense: float = 100.0;
-var curr_max_moral: float = 100.0;
+@export var bullet_offset: Dictionary[String, int] = {};
+@export var recoil_offset: Dictionary[String, int] = {};
+@export var rotate_speed: float = 5.0;
+
+var curr_defense: float = 50.0;
+var curr_max_moral: float = 30.0;
 var curr_power: float = 10.0;
 
 var health: float = 0: set = _on_health_set;

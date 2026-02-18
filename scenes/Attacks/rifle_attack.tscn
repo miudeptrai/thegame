@@ -7,6 +7,9 @@
 [sub_resource type="Resource" id="Resource_bqv24"]
 resource_local_to_scene = true
 script = ExtResource("2_hrn74")
+display_name = "Rifle"
+source_name = "Rifle Attack"
+attack = 45.0
 metadata/_custom_type_script = "uid://brlw51rs7bnso"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d1aon"]

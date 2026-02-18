@@ -36,7 +36,7 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 					continue;
 				
 				visited[curr["pos"]] = true;
-				if (curr["dist"] > owner_of_action.speed): continue;
+				if (curr["dist"] > owner_of_action.stats.speed): continue;
 				
 				load_range(curr["pos"]);
 				

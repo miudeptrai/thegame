@@ -3,11 +3,20 @@
 [ext_resource type="Script" uid="uid://e5g2x11tac8p" path="res://scripts/rifle_man.gd" id="1_di55e"]
 [ext_resource type="Script" uid="uid://ibcpvcosg08r" path="res://scripts/stats.gd" id="2_3qk45"]
 [ext_resource type="Texture2D" uid="uid://dfrw71egdtutc" path="res://asset/Troops/WWI/rifle-man.png" id="2_u3kgv"]
+[ext_resource type="FontFile" uid="uid://crtyl1rw2n20l" path="res://asset/Vaticanus-G3yVG.ttf" id="4_ghl74"]
+[ext_resource type="Script" uid="uid://x7gxdfcsgydm" path="res://scripts/dmg_tag.gd" id="5_stnpq"]
 
 [sub_resource type="Resource" id="Resource_b0nam"]
 resource_local_to_scene = true
 script = ExtResource("2_3qk45")
 display_name = "Rifle Man"
+skills = ["Rifle Attack"]
+bullet_offset = Dictionary[String, int]({
+"Rifle Attack": 30
+})
+recoil_offset = Dictionary[String, int]({
+"Rifle Attack": 2
+})
 metadata/_custom_type_script = "uid://ibcpvcosg08r"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3qk45"]
@@ -25,6 +34,14 @@ texture = ExtResource("2_u3kgv")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1478767512]
 position = Vector2(32, 32)
 shape = SubResource("RectangleShape2D_3qk45")
+
+[node name="Dmg Tag" type="Label" parent="." unique_id=1447298365]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(0.82025224, 0, 0.08672481, 1)
+theme_override_fonts/font = ExtResource("4_ghl74")
+script = ExtResource("5_stnpq")
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

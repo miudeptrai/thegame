@@ -16,4 +16,5 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 			var direction: Vector2 = sprite_b.global_position - sprite_a.global_position;
 			owner_of_action.direction = direction;
 			owner_of_action.rotating = true;
-			owner_of_action.firing_mode = skill.id;
+			owner_of_action.skill_in_use = skill.stats.source_name;
+			owner_of_action.target = target;
