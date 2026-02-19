@@ -20,7 +20,7 @@ var mouse_focused: bool = false;
 var attack_range_avail: Array = [];
 var move_range_avail: Array = [];
 var active_skills: Array = [];
-var bullet_avail: Array = [];
+var capture_tile_avail: Array = [];
 
 #Pathfinding
 var astar: AStar2D = AStar2D.new();

@@ -1,11 +1,13 @@
 [gd_scene format=3 uid="uid://cdq4bty6pmmxm"]
 
+[ext_resource type="Script" uid="uid://b8ihds1i77cq4" path="res://scripts/capture_tile.gd" id="1_jl5p4"]
 [ext_resource type="Texture2D" uid="uid://4x1f2yq11kna" path="res://asset/capture-tile.png" id="1_surxm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jl5p4"]
 size = Vector2(64, 64)
 
 [node name="Capture Tile" type="Area2D" unique_id=150026441]
+script = ExtResource("1_jl5p4")
 
 [node name="CaptureTile" type="Sprite2D" parent="." unique_id=10806146]
 position = Vector2(32, 32)

@@ -5,6 +5,7 @@ extends Area2D
 @onready var move_skill: Area2D = map.get_node("Move");
 
 @export var stats: Stats;
+@export var faction: Factions.FactionsType = Factions.FactionsType.DEFAULT;
 
 const SHOT_VFX: PackedScene = preload("uid://covenruuqmtv4");
 
@@ -118,7 +119,7 @@ func fire(target: Area2D, skill: Area2D) -> void:
 	target.stats.health -= dmg;
 	target.stats.moral -= target.stats.calculate_moral_decrease(dmg);
 	#Dmg indicator
-	target.get_node("Indicator").shot(dmg);
+	target.get_node("Dmg Indicator").display_text("%d" % dmg);
 	
 	#Bullet tracer
 	$Pivot/ShotVfx.shot();
@@ -160,9 +161,11 @@ func _on_mouse_exited() -> void:
 
 func _on_health_depleted():
 	print(self, " died");
+	$"State Indicator".display_text("Oops☠");
 
 func _on_moral_depleted():
 	print(self, " surrendered");
+	$"State Indicator".display_text("Surrendered🏳", "#ffffff");
 	
 	
 	

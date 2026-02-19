@@ -34,12 +34,21 @@ stats = SubResource("Resource_b0nam")
 position = Vector2(32, 32)
 shape = SubResource("RectangleShape2D_3qk45")
 
-[node name="Indicator" type="Label" parent="." unique_id=1447298365]
+[node name="Dmg Indicator" type="Label" parent="." unique_id=1447298365]
 visible = false
 z_index = 6
 offset_right = 40.0
 offset_bottom = 23.0
 theme_override_colors/font_color = Color(0.82025224, 0, 0.08672481, 1)
+theme_override_fonts/font = ExtResource("4_ghl74")
+script = ExtResource("5_stnpq")
+
+[node name="State Indicator" type="Label" parent="." unique_id=599241651]
+visible = false
+z_index = 6
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_fonts/font = ExtResource("4_ghl74")
 script = ExtResource("5_stnpq")
 
