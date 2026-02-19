@@ -35,12 +35,14 @@ func _ready() -> void:
 	var troop: Area2D = RIFLE_MAN.instantiate();
 	add_child(troop);
 	troop.global_position = Vector2(256, 256);
-	var troop_id = astar.get_closest_point(troop.global_position);
+	print("1st troop pos is: ", troop.global_position);
+	var troop_id = astar.get_closest_point(troop.global_position, true);
 	astar.set_point_disabled(troop_id, true);
 	troop = RIFLE_MAN.instantiate();
 	add_child(troop);
 	troop.global_position = Vector2(256, 192);
-	troop_id = astar.get_closest_point(troop.global_position);
+	print("2nd troop pos is: ", troop.global_position);
+	troop_id = astar.get_closest_point(troop.global_position, true);
 	astar.set_point_disabled(troop_id, true);
 	#print(troop.is_in_group("Troops"));
 	
@@ -66,6 +68,7 @@ func _process(delta: float) -> void:
 	else: $"Name Tag".hide();
 
 func load_default_map() -> void:
+	astar.clear();
 	var id: int = 0;
 	for i in range(ROWS):
 		for j in range(COLS):

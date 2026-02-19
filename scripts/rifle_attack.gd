@@ -16,7 +16,8 @@ func _ready() -> void:
 func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void:
 	if (event is InputEventMouseButton and event.pressed):
 		if (event.button_index == MOUSE_BUTTON_LEFT):
-			if (pressed): return;
+			if (pressed): 
+				return;
 			deselect_all_but_self();
 			
 			#print("Clicked");
@@ -83,9 +84,10 @@ func load_range(pos: Vector2i) -> void:
 	
 	#print("Loaded successfully");
 
-func deselect() -> void:
+func deselect(is_action: bool) -> void:
 	pressed = false;
-	map.mouse_focused = false;
+	if (not is_action):
+		map.mouse_focused = false;
 	var avail_arr: Array = map.attack_range_avail;
 	for i in range(active_attack_range_tile.size()):
 		avail_arr.append(active_attack_range_tile.pop_back());
@@ -95,6 +97,6 @@ func deselect_all_but_self() -> void:
 	for i in map.active_skills:
 		if (i == self): continue;
 		
-		i.deselect();
+		i.deselect(false);
 		
 	

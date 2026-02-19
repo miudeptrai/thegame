@@ -16,26 +16,36 @@ signal no_name_tag;
 
 func _ready() -> void:
 	add_to_group("Troops");
+	stats.health_depleted.connect(_on_health_depleted);
+	stats.moral_depleted.connect(_on_moral_depleted);
 
 func fire_process(target: Area2D, skill_name: String) -> void:
 	var skill: Area2D = map.get_node(skill_name);
 	
-	await rotate_to(target.global_position + Vector2(TEXTURE_WIDTH, TEXTURE_HEIGHT) / 2);
+	await rotate_to(target.global_position);
 	
 	fire(target, skill);
 	
 	await recoil(skill_name);
+	
+	map.mouse_focused = false;
 
 func follow_path(path: PackedVector2Array) -> void:
+	#var id: int = map.astar.get_closest_point(global_position);
+	#var connections: Array = map.astar.get_point_connections(id);
+	#print(connections);
+	
 	for i in range(1, path.size()):
 		#Get destination
 		var next_point: Vector2 = path[i];
 		
 		#Rotate
-		await rotate_to(next_point + Vector2(TEXTURE_WIDTH, TEXTURE_HEIGHT) / 2);
+		await rotate_to(next_point);
 		
 		#Move
 		await move_to(next_point);
+	
+	map.mouse_focused = false;
 
 func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void:
 	if (event is InputEventMouseButton and event.pressed):
@@ -44,7 +54,10 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 			#Toggle selection
 			
 			var select_tile: Sprite2D = map.get_node("Select Tile");
-			if (map.mouse_focused and move_skill.owner_of_action != self): return;
+			# If mouse is focused on other troops then
+			#print(map.mouse_focused);
+			if (map.mouse_focused and move_skill.owner_of_action != self):
+				return;
 			
 			#Move select tile
 			if (not select_tile.visible):
@@ -62,7 +75,7 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 				elif (skill.owner_of_action == self):
 					map.active_skills.pop_front();
 					skill.hide();
-				skill.deselect();
+				skill.deselect(false);
 				skill.owner_of_action = self;
 			
 			#Move skill
@@ -72,7 +85,7 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 			elif (move_skill.owner_of_action == self):
 				map.active_skills.pop_front();
 				move_skill.hide();
-			move_skill.deselect();
+			move_skill.deselect(false);
 			move_skill.owner_of_action = self;
 
 func recoil(skill_name: String) -> void:
@@ -100,15 +113,10 @@ func recoil(skill_name: String) -> void:
 	await tween.finished;
 
 func fire(target: Area2D, skill: Area2D) -> void:
-	#Calculate vars
-	var dmg: float = stats.calculate_damage(skill.stats, target);
-	
-	var moral_decrease: float = dmg;
-	if (target.stats.health != 0): moral_decrease /= target.stats.health;
-	
 	#Edit stats
+	var dmg = stats.calculate_damage(skill.stats, target);
 	target.stats.health -= dmg;
-	target.stats.moral -= moral_decrease;
+	target.stats.moral -= target.stats.calculate_moral_decrease(dmg);
 	#Dmg indicator
 	target.get_node("Indicator").shot(dmg);
 	
@@ -116,9 +124,8 @@ func fire(target: Area2D, skill: Area2D) -> void:
 	$Pivot/ShotVfx.shot();
 
 func rotate_to(point: Vector2) -> void:
-	var direction: Vector2 = point + Vector2(TEXTURE_WIDTH, TEXTURE_HEIGHT) / 2;
-	direction += pivot.global_position;
-	direction.normalized();
+	var direction: Vector2 = point - global_position;
+	direction = direction.normalized();
 	
 	var tween: Tween = create_tween();
 	tween.tween_property(
@@ -136,8 +143,10 @@ func move_to(point: Vector2) -> void:
 		self,
 		"global_position",
 		point,
-		stats.speed / 2
-	);
+		0.3
+	)\
+	.set_trans(Tween.TRANS_QUAD)\
+	.set_ease(Tween.EASE_OUT);
 	
 	await tween.finished;
 
@@ -148,6 +157,12 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	no_name_tag.emit();
+
+func _on_health_depleted():
+	print(self, " died");
+
+func _on_moral_depleted():
+	print(self, " surrendered");
 	
 	
 	

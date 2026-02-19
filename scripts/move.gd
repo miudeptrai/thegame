@@ -77,16 +77,18 @@ func load_range(pos: Vector2i) -> void:
 		
 	curr.global_position = new_pos;
 	#print(map.astar.get_point_ids());
-	var id: int = map.astar.get_closest_point(new_pos, true);
-	#print("Turned on point", id);
-	map.astar.set_point_disabled(id, false);
+	if (map.get_object_at_point(curr.global_position) == null):
+		var id: int = map.astar.get_closest_point(new_pos, true);
+		#print("Turned on point", id);
+		map.astar.set_point_disabled(id, false);
 	curr.show();
 	
 	#print("Loaded successfully");
 
-func deselect() -> void:
+func deselect(is_action: bool) -> void:
 	pressed = false;
-	map.mouse_focused = false;
+	if (not is_action):
+		map.mouse_focused = false;
 	#Moving all borrowed tiles to its owner and hiding it
 	var avail_arr: Array = map.move_range_avail;
 	for i in range(active_move_range_tile.size()):
@@ -101,7 +103,7 @@ func deselect_all_but_self() -> void:
 	for i in map.active_skills:
 		if (i == self): continue;
 		
-		i.deselect();
+		i.deselect(false);
 		
 		
 		

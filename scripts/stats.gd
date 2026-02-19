@@ -30,9 +30,9 @@ signal moral_depleted;
 @export var recoil_offset: Dictionary[String, int] = {};
 @export var rotate_speed: float = 5.0;
 
-var curr_defense: float = 50.0;
-var curr_max_moral: float = 30.0;
-var curr_power: float = 10.0;
+var curr_defense: float = 0.0;
+var curr_max_moral: float = 0.0;
+var curr_power: float = 0.0;
 
 var health: float = 0: set = _on_health_set;
 var moral: float = 0: set = _on_moral_set;
@@ -44,16 +44,26 @@ func _init() -> void:
 
 func setup_stats() -> void:
 	#recalculate curr stats first
+	curr_max_moral = base_max_moral;
+	curr_defense = base_defense;
+	curr_power = base_power;
+	
 	health = max_health;
 	moral = curr_max_moral;
 
 func calculate_damage(skill_stats: SkillStats, enemy: Area2D) -> float:
-	var dmg: float = (curr_power + skill_stats.attack) * moral;
+	var dmg: float = curr_power * skill_stats.attack * moral;
 	var enemy_def: float = enemy.stats.curr_defense * enemy.stats.moral;
+	var rng = randf_range(0.0, 3.0);
 	
-	var total_dmg: float = dmg / enemy_def;
+	var total_dmg: float = dmg / enemy_def + rng;
+	#print(total_dmg);
 	
 	return total_dmg;
+
+func calculate_moral_decrease(dmg: float) -> float:
+	if (health == 0): return dmg;
+	return dmg / health;
 
 func add_buff(buff: StatBuff) -> void:
 	stat_buffs.append(buff);

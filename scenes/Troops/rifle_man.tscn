@@ -17,9 +17,9 @@ bullet_offset = Dictionary[String, int]({
 "Rifle Attack": 30
 })
 recoil_offset = Dictionary[String, int]({
-"Rifle Attack": 2
+"Rifle Attack": 4
 })
-rotate_speed = 1.0
+rotate_speed = 0.3
 metadata/_custom_type_script = "uid://ibcpvcosg08r"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3qk45"]
@@ -36,6 +36,7 @@ shape = SubResource("RectangleShape2D_3qk45")
 
 [node name="Indicator" type="Label" parent="." unique_id=1447298365]
 visible = false
+z_index = 6
 offset_right = 40.0
 offset_bottom = 23.0
 theme_override_colors/font_color = Color(0.82025224, 0, 0.08672481, 1)
@@ -47,10 +48,16 @@ position = Vector2(32, 32)
 
 [node name="ShotVfx" parent="Pivot" unique_id=1270495997 instance=ExtResource("5_6prl8")]
 visible = false
+z_index = 0
 position = Vector2(32, 5)
 
 [node name="Sprite" type="Sprite2D" parent="Pivot" unique_id=1422962431]
 texture = ExtResource("2_u3kgv")
+
+[node name="Line2D" type="Line2D" parent="Pivot" unique_id=1743753916]
+visible = false
+points = PackedVector2Array(0, 0, 151, 0)
+default_color = Color(1, 0.51, 0.51, 0.5019608)
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

@@ -10,22 +10,27 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 			#Pathfind
 			#print("Troop pos:", owner_of_action.global_position);
 			#print("Tile pos:", global_position);
-			var start_id: int = map.astar.get_closest_point(owner_of_action.global_position);
-			var end_id: int = map.astar.get_closest_point(global_position);
-			#print("Start id:", start_id);
-			#print("End id:", end_id);
+			var start_id: int = map.astar.get_closest_point(
+				owner_of_action.global_position, 
+				true
+			);
+			#Turn off for pathfinding
+			map.astar.set_point_disabled(start_id, false);
+			
+			var end_id: int = map.astar.get_closest_point(global_position, true);
+			
 			var path: PackedVector2Array = map.astar.get_point_path(start_id, end_id);
 			if (path.is_empty()):
 				print("Invalid path");
 				return;
+			print("Path: ", path);
 			
 			#Reset obstacle
-			map.astar.set_point_disabled(start_id, false);
 			map.astar.set_point_disabled(end_id, true);
 			
 			#Move
 			owner_of_action.follow_path(path);
 			
 			#Move select tile
-			map.get_node("Move").deselect();
+			map.get_node("Move").deselect(true);
 			map.get_node("Select Tile").global_position = global_position;
