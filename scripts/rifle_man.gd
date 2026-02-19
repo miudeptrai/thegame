@@ -159,11 +159,12 @@ func _on_mouse_entered() -> void:
 func _on_mouse_exited() -> void:
 	no_name_tag.emit();
 
-func _on_health_depleted():
+func _on_health_depleted() -> void:
 	print(self, " died");
 	$"State Indicator".display_text("Oops☠");
 
-func _on_moral_depleted():
+func _on_moral_depleted() -> void:
+	if (stats.health == 0): return;
 	print(self, " surrendered");
 	$"State Indicator".display_text("Surrendered🏳", "#ffffff");
 	
