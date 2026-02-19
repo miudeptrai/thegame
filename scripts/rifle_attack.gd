@@ -2,6 +2,8 @@ extends Area2D
 
 const ATTACK_RANGE_TILE: PackedScene = preload("uid://dhi2m7yl010fv");
 
+@onready var map = get_parent();
+
 @export var stats: SkillStats;
 
 var owner_of_action: Area2D;
@@ -53,19 +55,20 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 					});
 			
 			pressed = true;
-			get_parent().mouse_focused = true;
+			map.mouse_focused = true;
 
 func load_range(pos: Vector2i) -> void:
 	#Setting up attack range tile and deploying it
+	#Preventing the troop pos
 	if (pos == Vector2i(0, 0)): return;
 	
 	var curr: Area2D;
-	var avail_arr: Array = get_parent().attack_range_avail;
+	var avail_arr: Array = map.attack_range_avail;
 	if (not avail_arr.is_empty()):
 		curr = avail_arr.pop_back();
 	else:
 		curr = ATTACK_RANGE_TILE.instantiate();
-		get_parent().add_child(curr);
+		map.add_child(curr);
 	curr.owner_of_action = owner_of_action;
 	curr.skill = self;
 	active_attack_range_tile.append(curr);
@@ -81,8 +84,6 @@ func load_range(pos: Vector2i) -> void:
 	#print("Loaded successfully");
 
 func deselect() -> void:
-	var map = get_parent();
-	
 	pressed = false;
 	map.mouse_focused = false;
 	var avail_arr: Array = map.attack_range_avail;
@@ -91,7 +92,6 @@ func deselect() -> void:
 		avail_arr[avail_arr.size() - 1].hide();
 	
 func deselect_all_but_self() -> void:
-	var map = get_parent();
 	for i in map.active_skills:
 		if (i == self): continue;
 		

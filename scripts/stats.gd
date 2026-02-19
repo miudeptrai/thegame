@@ -47,6 +47,14 @@ func setup_stats() -> void:
 	health = max_health;
 	moral = curr_max_moral;
 
+func calculate_damage(skill_stats: SkillStats, enemy: Area2D) -> float:
+	var dmg: float = (curr_power + skill_stats.attack) * moral;
+	var enemy_def: float = enemy.stats.curr_defense * enemy.stats.moral;
+	
+	var total_dmg: float = dmg / enemy_def;
+	
+	return total_dmg;
+
 func add_buff(buff: StatBuff) -> void:
 	stat_buffs.append(buff);
 	recalculate_stats.call_deferred();

@@ -28,8 +28,9 @@ var astar: AStar2D = AStar2D.new();
 func _ready() -> void:
 	load_default_map();
 	connect_grid();
-	print("Point count:", astar.get_point_count())
-	print("Connections of 0:", astar.get_point_connections(0))
+	disable_grid();
+	#print("Point count:", astar.get_point_count())
+	#print("Connections of 0:", astar.get_point_connections(0))
 	
 	var troop: Area2D = RIFLE_MAN.instantiate();
 	add_child(troop);
@@ -66,8 +67,8 @@ func _process(delta: float) -> void:
 
 func load_default_map() -> void:
 	var id: int = 0;
-	for i in range(0, ROWS):
-		for j in range(0, COLS):
+	for i in range(ROWS):
+		for j in range(COLS):
 			var pos: Vector2 = Vector2(
 				j * TEXTURE_WIDTH,
 				i * TEXTURE_HEIGHT
@@ -99,6 +100,10 @@ func connect_grid() -> void:
 			
 			if (astar.get_point_position(neighbour_id) == neighbour_pos):
 				astar.connect_points(id, neighbour_id);
+
+func disable_grid() -> void:
+	for id in astar.get_point_ids():
+		astar.set_point_disabled(id, true);
 
 func _on_name_tag(s, h, m):
 	displayed_name_tag = true;

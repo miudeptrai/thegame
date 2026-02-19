@@ -1,6 +1,6 @@
 extends Area2D
 
-@onready var sprite: Sprite2D = $Sprite;
+@onready var pivot: Node2D = $Pivot;
 @onready var map: Node2D = get_parent();
 @onready var move_skill: Area2D = map.get_node("Move");
 
@@ -14,90 +14,28 @@ const TEXTURE_HEIGHT: int = 64;
 signal name_tag(name_s: String, healthp: float, moralp:float);
 signal no_name_tag;
 
-var direction: Vector2;
-var firing: bool = false;
-var skill_in_use: String;
-var target: Area2D;
-
-var path: PackedVector2Array;
-var start_move_sequence: bool = false;
-var moving: bool = false;
-var next_interval: int = 1;
-
 func _ready() -> void:
 	add_to_group("Troops");
 
-func _process(delta: float) -> void:
-	if (firing):
-		rotate_sprite(delta);
+func fire_process(target: Area2D, skill_name: String) -> void:
+	var skill: Area2D = map.get_node(skill_name);
+	
+	await rotate_to(target.global_position + Vector2(TEXTURE_WIDTH, TEXTURE_HEIGHT) / 2);
+	
+	fire(target, skill);
+	
+	await recoil(skill_name);
+
+func follow_path(path: PackedVector2Array) -> void:
+	for i in range(1, path.size()):
+		#Get destination
+		var next_point: Vector2 = path[i];
 		
-		#Stop rotate/ firing
-		if (abs(sprite.rotation - direction.angle()) < 0.01):
-			firing = false;
-			if (skill_in_use == ""): return;
-			
-			var curr_skill: Area2D = map.get_node(skill_in_use);
-			
-			#Stop the range indicator
-			curr_skill.deselect();
-			
-			# Firing
-			var dir: Vector2 = Vector2.RIGHT.rotated(sprite.rotation);
-			var bullet: Sprite2D;
-			if (map.bullet_avail.size() == 0):
-				bullet = SHOT_VFX.instantiate();
-			else: bullet = map.bullet_avail.pop_back();
-			map.add_child(bullet);
-			bullet.global_rotation = dir.angle();
-			bullet.global_position = sprite.global_position\
-			 						 + dir * stats.bullet_offset[skill_in_use];
-			#print(bullet.global_position);
-			bullet.show();
-			bullet.shot();
-			#Calculate dmg and health
-			var dmg: float = (stats.curr_power + curr_skill.stats.attack) * stats.moral;
-			dmg /= target.stats.curr_defense;
-			dmg += randf_range(0.0, 5.0);
-			target.stats.health -= dmg;
-			target.stats.moral -= dmg / target.stats.health;
-			target.get_node("Indicator").shot(dmg);
-			print(target.stats.health);
-			
-			var tween: Tween = create_tween();
-			#Recoil
-			tween.tween_property(sprite, 
-								 "position", 
-								 -dir * stats.bullet_offset[skill_in_use], 
-								 0.4)\
-				.as_relative()\
-				.set_trans(Tween.TRANS_QUAD)\
-				.set_ease(Tween.EASE_OUT);
-			#Get back
-			tween.tween_property(sprite, 
-								 "position", 
-								 dir * stats.bullet_offset[skill_in_use], 
-								 0.4)\
-				.as_relative()\
-				.set_trans(Tween.TRANS_QUAD)\
-				.set_ease(Tween.EASE_OUT);
-	elif (start_move_sequence):
-		print(path);
-		if (moving):
-			var tween: Tween = create_tween();
-			tween.tween_property(self, "global_position", path[next_interval], 1.0)\
-				.set_trans(Tween.TRANS_QUAD)\
-				.set_ease(Tween.EASE_OUT);
-			moving = false;
-			next_interval += 1;
-			
-			if (next_interval >= path.size()):
-				start_move_sequence = false;
-				return;
-		else:
-			direction = (path[next_interval] + Vector2(TEXTURE_WIDTH, TEXTURE_HEIGHT))\
-						- global_position;
-			rotate_sprite(delta);
-			moving = true;
+		#Rotate
+		await rotate_to(next_point + Vector2(TEXTURE_WIDTH, TEXTURE_HEIGHT) / 2);
+		
+		#Move
+		await move_to(next_point);
 
 func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void:
 	if (event is InputEventMouseButton and event.pressed):
@@ -137,13 +75,71 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 			move_skill.deselect();
 			move_skill.owner_of_action = self;
 
-func rotate_sprite(delta: float) -> void:
-	#Rotate sprite
-	sprite.rotation = lerp_angle(
-		sprite.rotation,
+func recoil(skill_name: String) -> void:
+	var dir: Vector2 = Vector2.RIGHT.rotated(pivot.rotation);
+	var tween: Tween = create_tween();
+	#Recoil
+	tween.tween_property(
+		pivot, 
+		"position", 
+		-dir * stats.recoil_offset[skill_name], 
+		0.4)\
+	.as_relative()\
+	.set_trans(Tween.TRANS_QUAD)\
+	.set_ease(Tween.EASE_OUT);
+	#Get back
+	tween.tween_property(
+		pivot, 
+		"position", 
+		dir * stats.recoil_offset[skill_name], 
+		0.4)\
+	.as_relative()\
+	.set_trans(Tween.TRANS_QUAD)\
+	.set_ease(Tween.EASE_OUT);
+	
+	await tween.finished;
+
+func fire(target: Area2D, skill: Area2D) -> void:
+	#Calculate vars
+	var dmg: float = stats.calculate_damage(skill.stats, target);
+	
+	var moral_decrease: float = dmg;
+	if (target.stats.health != 0): moral_decrease /= target.stats.health;
+	
+	#Edit stats
+	target.stats.health -= dmg;
+	target.stats.moral -= moral_decrease;
+	#Dmg indicator
+	target.get_node("Indicator").shot(dmg);
+	
+	#Bullet tracer
+	$Pivot/ShotVfx.shot();
+
+func rotate_to(point: Vector2) -> void:
+	var direction: Vector2 = point + Vector2(TEXTURE_WIDTH, TEXTURE_HEIGHT) / 2;
+	direction += pivot.global_position;
+	direction.normalized();
+	
+	var tween: Tween = create_tween();
+	tween.tween_property(
+		$Pivot,
+		"rotation",
 		direction.angle(),
-		stats.rotate_speed * delta
+		stats.rotate_speed
 	);
+	
+	await tween.finished;
+
+func move_to(point: Vector2) -> void:
+	var tween: Tween = create_tween();
+	tween.tween_property(
+		self,
+		"global_position",
+		point,
+		stats.speed / 2
+	);
+	
+	await tween.finished;
 
 func _on_mouse_entered() -> void:
 	name_tag.emit("Rifle Man", stats.health / stats.max_health,

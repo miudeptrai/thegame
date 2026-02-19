@@ -1,5 +1,7 @@
 extends Area2D
 
+@onready var map: Node2D = get_parent();
+
 var owner_of_action: Area2D;
 var skill: Area2D;
 
@@ -10,11 +12,8 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 			if (target == null):
 				return;
 			
-			#Prepare var for rotate in troop's _process
-			var sprite_a: Sprite2D = owner_of_action.get_node("Sprite");
-			var sprite_b: Sprite2D = target.get_node("Sprite");
-			var direction: Vector2 = sprite_b.global_position - sprite_a.global_position;
-			owner_of_action.direction = direction;
-			owner_of_action.firing = true;
-			owner_of_action.skill_in_use = skill.stats.source_name;
-			owner_of_action.target = target;
+			#Prepare to shoot
+			owner_of_action.fire_process(target, skill.stats.source_name);
+			
+			#Clear
+			map.get_node(skill.stats.source_name).deselect();

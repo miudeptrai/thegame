@@ -1,8 +1,10 @@
 extends Area2D
 
-const MOVE_RANGE_TILE = preload("uid://boklfdbjlhr1q");
+const MOVE_RANGE_TILE: PackedScene = preload("uid://boklfdbjlhr1q");
 
-var owner_of_action;
+@onready var map: Node2D = get_parent();
+
+var owner_of_action: Area2D;
 var active_move_range_tile: Array = [];
 var pressed: bool = false;
 
@@ -26,14 +28,14 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 				Vector2i(-1, 0)
 			]
 			var visited: Dictionary = {};
-			var queue = [];
+			var queue: Array = [];
 			queue.append({
 				"pos": Vector2i(0, 0),
 				"dist": 0
 			});
 			
 			while (not queue.is_empty()):
-				var curr = queue.pop_front();
+				var curr: Dictionary = queue.pop_front();
 				
 				if (visited.has(curr["pos"])):
 					continue;
@@ -51,18 +53,20 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 					});
 			
 			pressed = true;
+			map.mouse_focused = true;
 
 func load_range(pos: Vector2i) -> void:
 	#Setting up attack range tile and deploying it
+	#Preventing the troop pos
 	if (pos == Vector2i(0, 0)): return;
 	
-	var curr;
-	var avail_arr = get_parent().move_range_avail;
+	var curr: Area2D;
+	var avail_arr: Array = map.move_range_avail;
 	if (not avail_arr.is_empty()):
 		curr = avail_arr.pop_back();
 	else:
 		curr = MOVE_RANGE_TILE.instantiate();
-		get_parent().add_child(curr);
+		map.add_child(curr);
 	curr.owner_of_action = owner_of_action;
 	active_move_range_tile.append(curr);
 	
@@ -72,20 +76,29 @@ func load_range(pos: Vector2i) -> void:
 	);
 		
 	curr.global_position = new_pos;
+	#print(map.astar.get_point_ids());
+	var id: int = map.astar.get_closest_point(new_pos, true);
+	#print("Turned on point", id);
+	map.astar.set_point_disabled(id, false);
 	curr.show();
 	
 	#print("Loaded successfully");
 
 func deselect() -> void:
 	pressed = false;
+	map.mouse_focused = false;
 	#Moving all borrowed tiles to its owner and hiding it
-	var avail_arr = get_parent().move_range_avail;
+	var avail_arr: Array = map.move_range_avail;
 	for i in range(active_move_range_tile.size()):
 		avail_arr.append(active_move_range_tile.pop_back());
 		avail_arr[avail_arr.size() - 1].hide();
+		var id: int = map.astar.get_closest_point(avail_arr[avail_arr.size() - 1].\
+												  global_position, true);
+		#print("Turned off point", id);
+		map.astar.set_point_disabled(id, true);
 
 func deselect_all_but_self() -> void:
-	for i in get_parent().active_skills:
+	for i in map.active_skills:
 		if (i == self): continue;
 		
 		i.deselect();

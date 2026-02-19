@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://ibcpvcosg08r" path="res://scripts/stats.gd" id="2_3qk45"]
 [ext_resource type="Texture2D" uid="uid://dfrw71egdtutc" path="res://asset/Troops/WWI/rifle-man.png" id="2_u3kgv"]
 [ext_resource type="FontFile" uid="uid://crtyl1rw2n20l" path="res://asset/Vaticanus-G3yVG.ttf" id="4_ghl74"]
+[ext_resource type="PackedScene" uid="uid://covenruuqmtv4" path="res://scenes/VFX/shot_vfx.tscn" id="5_6prl8"]
 [ext_resource type="Script" uid="uid://x7gxdfcsgydm" path="res://scripts/indicator.gd" id="5_stnpq"]
 
 [sub_resource type="Resource" id="Resource_b0nam"]
@@ -11,12 +12,14 @@ resource_local_to_scene = true
 script = ExtResource("2_3qk45")
 display_name = "Rifle Man"
 skills = Array[String](["Rifle Attack"])
+base_power = 35.0
 bullet_offset = Dictionary[String, int]({
 "Rifle Attack": 30
 })
 recoil_offset = Dictionary[String, int]({
 "Rifle Attack": 2
 })
+rotate_speed = 1.0
 metadata/_custom_type_script = "uid://ibcpvcosg08r"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3qk45"]
@@ -26,10 +29,6 @@ size = Vector2(64, 64)
 z_index = 5
 script = ExtResource("1_di55e")
 stats = SubResource("Resource_b0nam")
-
-[node name="Sprite" type="Sprite2D" parent="." unique_id=1422962431]
-position = Vector2(32, 32)
-texture = ExtResource("2_u3kgv")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1478767512]
 position = Vector2(32, 32)
@@ -42,6 +41,16 @@ offset_bottom = 23.0
 theme_override_colors/font_color = Color(0.82025224, 0, 0.08672481, 1)
 theme_override_fonts/font = ExtResource("4_ghl74")
 script = ExtResource("5_stnpq")
+
+[node name="Pivot" type="Node2D" parent="." unique_id=2029749342]
+position = Vector2(32, 32)
+
+[node name="ShotVfx" parent="Pivot" unique_id=1270495997 instance=ExtResource("5_6prl8")]
+visible = false
+position = Vector2(32, 5)
+
+[node name="Sprite" type="Sprite2D" parent="Pivot" unique_id=1422962431]
+texture = ExtResource("2_u3kgv")
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
