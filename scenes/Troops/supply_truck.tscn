@@ -1,0 +1,48 @@
+[gd_scene format=3 uid="uid://bxdc4d2hnritm"]
+
+[ext_resource type="FontFile" uid="uid://crtyl1rw2n20l" path="res://asset/Vaticanus-G3yVG.ttf" id="1_ald5f"]
+[ext_resource type="Script" uid="uid://f6w1nqe8fvsr" path="res://scripts/supply_truck.gd" id="1_icojt"]
+[ext_resource type="Texture2D" uid="uid://g7626jpde8qi" path="res://asset/Troops/WWI/supply-truck.png" id="1_uyvms"]
+[ext_resource type="Script" uid="uid://x7gxdfcsgydm" path="res://scripts/indicator.gd" id="2_7kwg2"]
+[ext_resource type="Resource" uid="uid://bt1cw6fu7o8we" path="res://asset/Stats/supply-truck-stats.tres" id="2_icojt"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7tw8j"]
+size = Vector2(64, 64)
+
+[node name="Supply Truck" type="Area2D" unique_id=893928282]
+z_index = 5
+script = ExtResource("1_icojt")
+stats = ExtResource("2_icojt")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=773180404]
+position = Vector2(32, 32)
+shape = SubResource("RectangleShape2D_7tw8j")
+
+[node name="Dmg Indicator" type="Label" parent="." unique_id=1393931665]
+visible = false
+z_index = 6
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(0.82025224, 0, 0.08672481, 1)
+theme_override_fonts/font = ExtResource("1_ald5f")
+script = ExtResource("2_7kwg2")
+
+[node name="State Indicator" type="Label" parent="." unique_id=1051564800]
+visible = false
+z_index = 6
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_ald5f")
+script = ExtResource("2_7kwg2")
+
+[node name="Pivot" type="Node2D" parent="." unique_id=673856973]
+position = Vector2(32, 32)
+
+[node name="Sprite" type="Sprite2D" parent="Pivot" unique_id=888843555]
+texture = ExtResource("1_uyvms")
+
+[node name="Line2D" type="Line2D" parent="Pivot" unique_id=1845595340]
+visible = false
+points = PackedVector2Array(0, 0, 151, 0)
+default_color = Color(1, 0.51, 0.51, 0.5019608)

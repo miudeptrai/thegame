@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="Stats" format=3 uid="uid://bt1cw6fu7o8we"]
+
+[ext_resource type="Script" uid="uid://ibcpvcosg08r" path="res://scripts/stats.gd" id="1_t22ak"]
+[ext_resource type="Texture2D" uid="uid://g7626jpde8qi" path="res://asset/Troops/WWI/supply-truck.png" id="2_0v7c4"]
+[ext_resource type="Texture2D" uid="uid://qopieco4bwi5" path="res://asset/Troops/WWI/dog-supply-truck.png" id="3_7xxd3"]
+[ext_resource type="Texture2D" uid="uid://6uq7ibpk6uhb" path="res://asset/Troops/WWI/neutral-supply-truck.png" id="4_vh3mw"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_t22ak")
+display_name = "Supply Truck"
+skills = Array[String](["Small Supply"])
+max_health = 150.0
+base_max_morale = 25.0
+base_defense = 60.0
+base_power = 0.0
+base_heal = 35.0
+morale_recovery = 0.4
+recoil_offset = Dictionary[String, int]({
+"Medium Supply": 0,
+"Small Supply": 0
+})
+rotate_speed = 0.3
+textures = Dictionary[int, Texture2D]({
+0: ExtResource("2_0v7c4"),
+2: ExtResource("3_7xxd3"),
+3: ExtResource("4_vh3mw")
+})
+metadata/_custom_type_script = "uid://ibcpvcosg08r"

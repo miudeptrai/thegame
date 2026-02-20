@@ -1,26 +1,11 @@
 [gd_scene format=3 uid="uid://b7a6788cu3t88"]
 
 [ext_resource type="Script" uid="uid://e5g2x11tac8p" path="res://scripts/rifle_man.gd" id="1_di55e"]
-[ext_resource type="Script" uid="uid://ibcpvcosg08r" path="res://scripts/stats.gd" id="2_3qk45"]
+[ext_resource type="Resource" uid="uid://cpf335jhk7bvt" path="res://asset/Stats/rifle-man-stats.tres" id="2_stnpq"]
 [ext_resource type="Texture2D" uid="uid://dfrw71egdtutc" path="res://asset/Troops/WWI/rifle-man.png" id="2_u3kgv"]
 [ext_resource type="FontFile" uid="uid://crtyl1rw2n20l" path="res://asset/Vaticanus-G3yVG.ttf" id="4_ghl74"]
 [ext_resource type="PackedScene" uid="uid://covenruuqmtv4" path="res://scenes/VFX/shot_vfx.tscn" id="5_6prl8"]
 [ext_resource type="Script" uid="uid://x7gxdfcsgydm" path="res://scripts/indicator.gd" id="5_stnpq"]
-
-[sub_resource type="Resource" id="Resource_b0nam"]
-resource_local_to_scene = true
-script = ExtResource("2_3qk45")
-display_name = "Rifle Man"
-skills = Array[String](["Rifle Attack"])
-base_power = 35.0
-bullet_offset = Dictionary[String, int]({
-"Rifle Attack": 30
-})
-recoil_offset = Dictionary[String, int]({
-"Rifle Attack": 4
-})
-rotate_speed = 0.3
-metadata/_custom_type_script = "uid://ibcpvcosg08r"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3qk45"]
 size = Vector2(64, 64)
@@ -28,8 +13,7 @@ size = Vector2(64, 64)
 [node name="Rifle Man" type="Area2D" unique_id=1199333040 groups=["Troops"]]
 z_index = 5
 script = ExtResource("1_di55e")
-stats = SubResource("Resource_b0nam")
-faction = null
+stats = ExtResource("2_stnpq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1478767512]
 position = Vector2(32, 32)

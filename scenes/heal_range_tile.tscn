@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://d3dsohta1m4dt"]
+
+[ext_resource type="Script" uid="uid://c3lsb2s3ac8un" path="res://scripts/heal_range_tile.gd" id="1_gr4rk"]
+[ext_resource type="Texture2D" uid="uid://b7j4lp1nsk25l" path="res://asset/heal-range-tile.png" id="2_np8km"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7oayh"]
+size = Vector2(64, 64)
+
+[node name="Heal Range Tile" type="Area2D" unique_id=1447630693]
+script = ExtResource("1_gr4rk")
+
+[node name="HealRangeTile" type="Sprite2D" parent="." unique_id=233725834]
+position = Vector2(32, 32)
+texture = ExtResource("2_np8km")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=602589340]
+position = Vector2(32, 32)
+shape = SubResource("RectangleShape2D_7oayh")

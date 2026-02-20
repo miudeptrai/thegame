@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cnavtn3pbr7lx"]
+
+[ext_resource type="Script" uid="uid://dtl6liklnsb25" path="res://scripts/camera.gd" id="1_cvpoc"]
+
+[node name="Camera" type="CharacterBody2D" unique_id=1737084083]
+script = ExtResource("1_cvpoc")
+speed = 1000.0
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=488493542]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=452611939]
+custom_minimum_size = Vector2(32, 32)
+offset_left = -480.0
+offset_top = 205.0
+offset_right = 480.0
+offset_bottom = 270.0
+size_flags_horizontal = 6
+size_flags_vertical = 4
+alignment = 2

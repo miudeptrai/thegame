@@ -72,7 +72,7 @@ func load_range(pos: Vector2i) -> void:
 	var curr: Area2D;
 	var avail_move_arr: Array = map.move_range_avail;
 	var avail_capture_arr: Array = map.capture_tile_avail;
-	if (obj == null or obj.stats.moral != 0):
+	if (obj == null or obj.stats.morale != 0):
 		if (not avail_move_arr.is_empty()):
 			curr = avail_move_arr.pop_back();
 		else:

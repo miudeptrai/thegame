@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://dvrbkxt33tdyx"]
+
+[ext_resource type="Script" uid="uid://c4p7doychya0q" path="res://scripts/small_supply.gd" id="1_ofqc8"]
+[ext_resource type="Script" uid="uid://brlw51rs7bnso" path="res://scripts/skill_stats.gd" id="2_tyroo"]
+[ext_resource type="Texture2D" uid="uid://cp30k0tnmrlrj" path="res://asset/Heal/supply.png" id="3_47non"]
+
+[sub_resource type="Resource" id="Resource_cfomg"]
+resource_local_to_scene = true
+script = ExtResource("2_tyroo")
+display_name = "Supply"
+source_name = "Small Supply"
+attack = 5.0
+metadata/_custom_type_script = "uid://brlw51rs7bnso"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qs4ik"]
+size = Vector2(32, 32)
+
+[node name="Small Supply" type="Area2D" unique_id=200746317]
+z_index = 30
+script = ExtResource("1_ofqc8")
+stats = SubResource("Resource_cfomg")
+
+[node name="Supply" type="Sprite2D" parent="." unique_id=1434326067]
+position = Vector2(16, 16)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_47non")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1382221853]
+position = Vector2(16, 16)
+shape = SubResource("RectangleShape2D_qs4ik")

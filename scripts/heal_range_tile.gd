@@ -11,7 +11,7 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 			var target: Area2D = get_parent().get_object_at_point(
 				global_position,
 				true,
-				false,
+				true,
 				owner_of_action.faction
 			);
 			if (target == null):
@@ -19,7 +19,7 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 			#print(target, " at ", target.global_position);
 			
 			#Prepare to shoot
-			owner_of_action.fire_process(target, skill.stats.source_name);
+			owner_of_action.heal_process(target, skill.stats.source_name);
 			
 			#Clear
 			map.get_node(skill.stats.source_name).deselect(true);

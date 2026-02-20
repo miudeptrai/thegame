@@ -8,11 +8,12 @@ const COLS: int = 15;
 
 const BIOME_TILE = preload("uid://wbo055sbx06x");
 const RIFLE_MAN = preload("uid://b7a6788cu3t88");
+const SUPPLY_TRUCK = preload("uid://bxdc4d2hnritm");
 
 var displayed_name_tag: bool = false;
 var name_s: String;
 var healthp: float;
-var moralp: float;
+var moralep: float;
 var ally: bool;
 var enemy: bool;
 
@@ -21,6 +22,7 @@ var mouse_focused: bool = false;
 
 var attack_range_avail: Array = [];
 var move_range_avail: Array = [];
+var heal_range_avail: Array = [];
 var active_skills: Array = [];
 var capture_tile_avail: Array = [];
 
@@ -47,7 +49,7 @@ func _ready() -> void:
 	add_child(troop);
 	troop.global_position = Vector2(320, 192);
 	troop.faction = Factions.FactionsType.DOG;
-	print("3rd troop pos is: ", troop.global_position);
+	print("2nd troop pos is: ", troop.global_position);
 	troop_id = astar.get_closest_point(troop.global_position, true);
 	astar.set_point_disabled(troop_id, true);
 	
@@ -55,7 +57,16 @@ func _ready() -> void:
 	add_child(troop);
 	troop.global_position = Vector2(256, 192);
 	troop.faction = Factions.FactionsType.CAT;
-	print("2nd troop pos is: ", troop.global_position);
+	print("3rd troop pos is: ", troop.global_position);
+	troop_id = astar.get_closest_point(troop.global_position, true);
+	astar.set_point_disabled(troop_id, true);
+	#print(troop.is_in_group("Troops"));
+	
+	troop = SUPPLY_TRUCK.instantiate();
+	add_child(troop);
+	troop.global_position = Vector2(320, 256);
+	troop.faction = Factions.FactionsType.DEFAULT;
+	print("4th troop pos is: ", troop.global_position);
 	troop_id = astar.get_closest_point(troop.global_position, true);
 	astar.set_point_disabled(troop_id, true);
 	#print(troop.is_in_group("Troops"));
@@ -127,7 +138,7 @@ func _on_name_tag(s: String, h: float, m: float, a: bool, e: bool):
 	
 	name_s = s;
 	healthp = h
-	moralp = m;
+	moralep = m;
 	ally = a;
 	enemy = e;
 
@@ -140,8 +151,8 @@ func display_name_tag():
 		t = "(Enemy)";
 	label.text = """ Name: %s %s
  Health: %.2f%%
- Moral: %.2f%%
-""" % [name_s, t, healthp * 100.0, moralp * 100.0];  
+ Morale: %.2f%%
+""" % [name_s, t, healthp * 100.0, moralep * 100.0];  
 	
 	$"Name Tag".global_position = get_global_mouse_position();
 	$"Name Tag".show();
@@ -150,7 +161,12 @@ func display_name_tag():
 func _on_no_name_tag():
 	displayed_name_tag = false;
 	
-func get_object_at_point(point: Vector2):
+func get_object_at_point(
+	point: Vector2, 
+	use_faction: bool = false, 
+	search_for_ally: bool = false,
+	faction: Factions.FactionsType = Factions.FactionsType.NEUTRAL
+) -> Area2D:
 	var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state;
 
 	var query: PhysicsPointQueryParameters2D = PhysicsPointQueryParameters2D.new();
@@ -161,6 +177,15 @@ func get_object_at_point(point: Vector2):
 	var result: Array = space_state.intersect_point(query);
 
 	for i in result:
-		if (i.collider.is_in_group("Troops")): return i.collider;
+		if (i.collider.is_in_group("Troops")):
+			#No friendly fire
+			if (not use_faction):
+				return i.collider;
+			
+			if (not search_for_ally and i.collider.faction != faction):
+				return i.collider;
+			
+			if (search_for_ally and Factions.allies.has(i.collider.faction)):
+				return i.collider;
 	#print("Found nothing");
 	return null;

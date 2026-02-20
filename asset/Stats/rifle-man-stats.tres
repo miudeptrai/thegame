@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="Stats" format=3 uid="uid://cpf335jhk7bvt"]
+
+[ext_resource type="Script" uid="uid://ibcpvcosg08r" path="res://scripts/stats.gd" id="1_ev5f7"]
+[ext_resource type="Texture2D" uid="uid://dfrw71egdtutc" path="res://asset/Troops/WWI/rifle-man.png" id="2_1g66t"]
+[ext_resource type="Texture2D" uid="uid://c8tf3u31heigx" path="res://asset/Troops/WWI/cat-rifle-man.png" id="3_am4ku"]
+[ext_resource type="Texture2D" uid="uid://c3cuhk0idky3" path="res://asset/Troops/WWI/dog-rifle-man.png" id="4_56onf"]
+[ext_resource type="Texture2D" uid="uid://copnneknxdcc6" path="res://asset/Troops/WWI/neutral-rifle-man.png" id="5_41yu1"]
+
+[resource]
+resource_local_to_scene = true
+script = ExtResource("1_ev5f7")
+display_name = "Rifle Man"
+skills = Array[String](["Rifle Attack"])
+base_power = 35.0
+base_heal = 0.0
+recoil_offset = Dictionary[String, int]({
+"Rifle Attack": 4
+})
+rotate_speed = 0.3
+textures = Dictionary[int, Texture2D]({
+0: ExtResource("2_1g66t"),
+1: ExtResource("3_am4ku"),
+2: ExtResource("4_56onf"),
+3: ExtResource("5_41yu1")
+})
+metadata/_custom_type_script = "uid://ibcpvcosg08r"

@@ -22,14 +22,12 @@ func _ready() -> void:
 	stats.health_depleted.connect(_on_health_depleted);
 	stats.morale_depleted.connect(_on_morale_depleted);
 
-func fire_process(target: Area2D, skill_name: String) -> void:
+func heal_process(target: Area2D, skill_name: String) -> void:
 	var skill: Area2D = map.get_node(skill_name);
 	
 	await rotate_to(target.global_position);
 	
-	fire(target, skill);
-	
-	await recoil(skill_name);
+	heal(target, skill);
 	
 	map.mouse_focused = false;
 
@@ -77,6 +75,7 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 			
 			#Skills
 			for skill_name in stats.skills:
+				print(skill_name)
 				var skill = map.get_node(skill_name);
 				if (not skill.visible):
 					map.active_skills.append(skill);
@@ -97,41 +96,16 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 			move_skill.deselect(false);
 			move_skill.owner_of_action = self;
 
-func recoil(skill_name: String) -> void:
-	var dir: Vector2 = Vector2.RIGHT.rotated(pivot.rotation);
-	var tween: Tween = create_tween();
-	#Recoil
-	tween.tween_property(
-		pivot, 
-		"position", 
-		-dir * stats.recoil_offset[skill_name], 
-		0.4)\
-	.as_relative()\
-	.set_trans(Tween.TRANS_QUAD)\
-	.set_ease(Tween.EASE_OUT);
-	#Get back
-	tween.tween_property(
-		pivot, 
-		"position", 
-		dir * stats.recoil_offset[skill_name], 
-		0.4)\
-	.as_relative()\
-	.set_trans(Tween.TRANS_QUAD)\
-	.set_ease(Tween.EASE_OUT);
-	
-	await tween.finished;
-
-func fire(target: Area2D, skill: Area2D) -> void:
+#Fix
+func heal(target: Area2D, skill: Area2D) -> void:
 	clickable = false;
 	#Edit stats
-	var dmg = stats.calculate_damage(skill.stats, target);
-	target.stats.health -= dmg;
-	target.stats.morale -= target.stats.calculate_morale_decrease(dmg);
+	var amount: float = stats.calculate_heal(skill.stats);
+	target.stats.health += amount;
+	target.stats.morale += target.stats.calculate_morale_increase(skill.stats);
 	#Dmg indicator
-	target.get_node("Dmg Indicator").display_text("%d" % dmg);
+	target.get_node("Dmg Indicator").display_text("%d" % amount, "#68ff00");
 	
-	#Bullet tracer
-	$Pivot/ShotVfx.shot();
 	clickable = true;
 
 func rotate_to(point: Vector2) -> void:
