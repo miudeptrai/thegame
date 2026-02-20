@@ -5,7 +5,10 @@ extends Area2D
 @onready var move_skill: Area2D = map.get_node("Move");
 
 @export var stats: Stats;
-@export var faction: Factions.FactionsType = Factions.FactionsType.DEFAULT;
+@export var faction: Factions.FactionsType = Factions.FactionsType.DEFAULT:
+	set = _on_faction_change;
+
+var captured: bool = false;
 
 const SHOT_VFX: PackedScene = preload("uid://covenruuqmtv4");
 
@@ -53,6 +56,9 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 		if (event.button_index == MOUSE_BUTTON_LEFT):
 			#print("Clicked: ", self);
 			#Toggle selection
+			if (faction != Factions.FactionsType.DEFAULT):
+				#DEFAULT faction is the player
+				return;
 			
 			var select_tile: Sprite2D = map.get_node("Select Tile");
 			# If mouse is focused on other troops then
@@ -152,8 +158,13 @@ func move_to(point: Vector2) -> void:
 	await tween.finished;
 
 func _on_mouse_entered() -> void:
-	name_tag.emit("Rifle Man", stats.health / stats.max_health,
-				  stats.moral / stats.curr_max_moral);
+	name_tag.emit(
+		"Rifle Man", 
+		stats.health / stats.max_health,
+		stats.moral / stats.curr_max_moral, 
+		Factions.allies.has(faction),
+		Factions.enemies.has(faction)
+);
 	#print("Nametag required");
 
 func _on_mouse_exited() -> void:
@@ -167,6 +178,15 @@ func _on_moral_depleted() -> void:
 	if (stats.health == 0): return;
 	print(self, " surrendered");
 	$"State Indicator".display_text("Surrendered🏳", "#ffffff");
+	faction = Factions.FactionsType.NEUTRAL;
+
+func _on_faction_change(value: Factions.FactionsType) -> void:
+	faction = value;
+	$Pivot/Sprite.texture = Factions.get_texture(faction);
+	print(captured);
+	if (captured):
+		$"State Indicator".display_text("Captured✊", "#ffffff");
+		captured = false;
 	
 	
 	

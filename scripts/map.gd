@@ -13,6 +13,8 @@ var displayed_name_tag: bool = false;
 var name_s: String;
 var healthp: float;
 var moralp: float;
+var ally: bool;
+var enemy: bool;
 
 var mouse_selected: bool = false;
 var mouse_focused: bool = false;
@@ -32,15 +34,27 @@ func _ready() -> void:
 	#print("Point count:", astar.get_point_count())
 	#print("Connections of 0:", astar.get_point_connections(0))
 	
+	print("Factions: ", Factions);
+	
 	var troop: Area2D = RIFLE_MAN.instantiate();
 	add_child(troop);
 	troop.global_position = Vector2(256, 256);
 	print("1st troop pos is: ", troop.global_position);
 	var troop_id = astar.get_closest_point(troop.global_position, true);
 	astar.set_point_disabled(troop_id, true);
+	
+	troop = RIFLE_MAN.instantiate();
+	add_child(troop);
+	troop.global_position = Vector2(320, 192);
+	troop.faction = Factions.FactionsType.DOG;
+	print("3rd troop pos is: ", troop.global_position);
+	troop_id = astar.get_closest_point(troop.global_position, true);
+	astar.set_point_disabled(troop_id, true);
+	
 	troop = RIFLE_MAN.instantiate();
 	add_child(troop);
 	troop.global_position = Vector2(256, 192);
+	troop.faction = Factions.FactionsType.CAT;
 	print("2nd troop pos is: ", troop.global_position);
 	troop_id = astar.get_closest_point(troop.global_position, true);
 	astar.set_point_disabled(troop_id, true);
@@ -64,7 +78,7 @@ func _process(delta: float) -> void:
 	#print(snap_pos);
 	
 	if (displayed_name_tag):
-		display_name_tag(name_s, healthp, moralp);
+		display_name_tag();
 	else: $"Name Tag".hide();
 
 func load_default_map() -> void:
@@ -108,19 +122,26 @@ func disable_grid() -> void:
 	for id in astar.get_point_ids():
 		astar.set_point_disabled(id, true);
 
-func _on_name_tag(s, h, m):
+func _on_name_tag(s: String, h: float, m: float, a: bool, e: bool):
 	displayed_name_tag = true;
 	
 	name_s = s;
 	healthp = h
 	moralp = m;
+	ally = a;
+	enemy = e;
 
-func display_name_tag(s: String, h: float, m: float):
+func display_name_tag():
 	var label: Label = $"Name Tag/Label";
-	label.text = """ Name: %s
+	var t: String = "";
+	if (ally):
+		t = "(Ally)";
+	elif (enemy):
+		t = "(Enemy)";
+	label.text = """ Name: %s %s
  Health: %.2f%%
  Moral: %.2f%%
-""" % [s, h * 100.0, m * 100.0];  
+""" % [name_s, t, healthp * 100.0, moralp * 100.0];  
 	
 	$"Name Tag".global_position = get_global_mouse_position();
 	$"Name Tag".show();

@@ -11,6 +11,7 @@ func _input_event(viewport: Viewport, event: InputEvent, shape_idx: int) -> void
 			#print("Troop pos:", owner_of_action.global_position);
 			#print("Tile pos:", global_position);
 			var target: Area2D = map.get_object_at_point(global_position);
+			target.captured = true;
 			target.faction = owner_of_action.faction;
 			print("Captured");
 			

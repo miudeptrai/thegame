@@ -29,6 +29,7 @@ size = Vector2(64, 64)
 z_index = 5
 script = ExtResource("1_di55e")
 stats = SubResource("Resource_b0nam")
+faction = null
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1478767512]
 position = Vector2(32, 32)
